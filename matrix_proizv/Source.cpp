@@ -6,7 +6,10 @@
 #define SIZE 1000 //размерность матриц, т.е. 1000х1000 
 
 using namespace std;
-
+/*
+ѕроцедура заполнени€ файла
+матрицей 1000х1000 с рандомными числами.
+*/
 void createMatrix(string nameTxt) {
 	srand(time(0));
 
@@ -29,7 +32,11 @@ void createMatrix(string nameTxt) {
 		}
 	}
 }
-
+/*
+ѕроцедура записи в файл массива с затратами 
+времени на умножение матриц с размерност€ми 
+от 3х3 до 1000х1000.
+*/
 void writeTime(double t[SIZE]) {
 	srand(time(0));
 
@@ -41,7 +48,9 @@ void writeTime(double t[SIZE]) {
 	}
 	fout.close();
 }
-
+/*
+ѕроцедура работы в консоли с пользователем.
+*/
 void askToCreateMatrix() {
 	char answer;
 	cin >> answer;
@@ -57,7 +66,10 @@ void askToCreateMatrix() {
 		askToCreateMatrix();
 	}
 }
-
+/*
+—читывание файла и заполнение двумерного 
+динамического массива.
+*/
 void readMatrixFromTxt(string nameTxt, int **matrix)
 {
 	ifstream fin(nameTxt, ios_base::in);
@@ -69,7 +81,10 @@ void readMatrixFromTxt(string nameTxt, int **matrix)
 	}
 	fin.close();
 }
-
+/*
+вывод на экран двумерного динамического массива
+(матрицы) желаемого размера N
+*/
 void printMatrix(int **matrix, int N) {
 	for (size_t i = 0; i < N; i++)
 	{
@@ -80,7 +95,9 @@ void printMatrix(int **matrix, int N) {
 		cout << endl;
 	}
 }
-
+/*
+»нициализаци€ двумерного динамического массива с размерностью N
+*/
 void initializeMatrix(int **matrix, int N) {
 	for (size_t i = 0; i < N; i++)
 	{
@@ -91,10 +108,14 @@ void initializeMatrix(int **matrix, int N) {
 		cout << endl;
 	}
 }
-
+/*
+перемножение двух матриц, с распараллеливанием или нет.
+*/
 int** matrixProduct(int **matrix_1, int**matrix_2, int isParallel) {
-	
+	//объ€вл€ем двумерный динамический 
+	//массив, который содержит результат перемножени€ 
 	int **matrix_result = new int *[SIZE];
+	initializeMatrix(matrix_result, SIZE);
 	//выдел€ем пам€ть динамическим массивам
 	for (int i = 0; i < SIZE; i++) {
 		matrix_1[i] = new int[SIZE];
@@ -104,13 +125,9 @@ int** matrixProduct(int **matrix_1, int**matrix_2, int isParallel) {
 	//заполн€ем матрицы
 	readMatrixFromTxt("matrix_1.txt", matrix_1);
 	readMatrixFromTxt("matrix_2.txt", matrix_2);
-
 	
-	initializeMatrix(matrix_result, SIZE);
 	double timeArray[SIZE];
 	clock_t t1, t2;
-
-
 
 	for (size_t size = 2; size < SIZE; size++)
 	{
@@ -126,11 +143,10 @@ int** matrixProduct(int **matrix_1, int**matrix_2, int isParallel) {
 		t2 = clock();
 		timeArray[size] = (double)(t2 - t1) / (double)CLOCKS_PER_SEC;
 		cout << "size of matrix: " << size << " Time: " << timeArray[size] << '\n';
-
 	}
-
+	//«аписываем врем€ всех перемножений в файл.
 	writeTime(timeArray);
-
+	//«аписываем результат перемножени€ в файл.
 	ofstream fout("resultMatrix1.txt", ios_base::out | ios_base::trunc);
 	for (int i = 0; i < SIZE; i++)
 	{
@@ -163,11 +179,14 @@ int main() {
 		matrix_1[i] = new int[SIZE];
 		matrix_2[i] = new int[SIZE];
 	}
+
 	//заполн€ем матрицы
 	readMatrixFromTxt("matrix_1.txt", matrix_1);
 	readMatrixFromTxt("matrix_2.txt", matrix_2);
 	
+	//вычисл€ем с распараллеливанием
 	matrixProduct(matrix_1, matrix_2, 1);
+	//вычисл€ем без распараллеливани€
 	matrixProduct(matrix_1, matrix_2, 0);
 
 	system("pause");

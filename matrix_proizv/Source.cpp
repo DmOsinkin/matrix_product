@@ -105,7 +105,6 @@ void initializeMatrix(int **matrix, int N) {
 		{
 			matrix[i][j]=0;
 		}
-		cout << endl;
 	}
 }
 /*
@@ -115,13 +114,13 @@ int** matrixProduct(int **matrix_1, int**matrix_2, int isParallel) {
 	//объявляем двумерный динамический 
 	//массив, который содержит результат перемножения 
 	int **matrix_result = new int *[SIZE];
-	initializeMatrix(matrix_result, SIZE);
 	//выделяем память динамическим массивам
 	for (int i = 0; i < SIZE; i++) {
 		matrix_1[i] = new int[SIZE];
 		matrix_2[i] = new int[SIZE];
 		matrix_result[i] = new int[SIZE];
 	}
+	initializeMatrix(matrix_result, SIZE);
 	//заполняем матрицы
 	readMatrixFromTxt("matrix_1.txt", matrix_1);
 	readMatrixFromTxt("matrix_2.txt", matrix_2);
@@ -142,7 +141,12 @@ int** matrixProduct(int **matrix_1, int**matrix_2, int isParallel) {
 		}
 		t2 = clock();
 		timeArray[size] = (double)(t2 - t1) / (double)CLOCKS_PER_SEC;
-		cout << "size of matrix: " << size << " Time: " << timeArray[size] << '\n';
+		if ((size == 100) || (size == 200) || (size == 300) ||
+			(size == 400) || (size == 500) || (size == 600) ||
+			(size == 700) || (size == 800) || (size == 900) || (size == 999))
+		{
+			cout << "size of matrix: " << size << " Time: " << timeArray[size] << '\n';
+		}
 	}
 	//Записываем время всех перемножений в файл.
 	writeTime(timeArray);
